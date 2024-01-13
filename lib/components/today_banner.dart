@@ -11,7 +11,6 @@ class TodayBanner extends StatelessWidget {
     required this.scheduleCount,
   });
 
-  @override
   final textStyle = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.white,

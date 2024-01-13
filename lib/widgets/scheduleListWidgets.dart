@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_callender/components/scheduleCard.dart';
 
-class TodoWidgets extends StatelessWidget {
-  const TodoWidgets({
+class ScheduleListWidgets extends StatelessWidget {
+  const ScheduleListWidgets({
     super.key,
   });
 
