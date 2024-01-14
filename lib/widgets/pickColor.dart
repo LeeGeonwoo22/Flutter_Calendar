@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ColorPicker extends StatelessWidget {
-  const ColorPicker({super.key});
+  final List<Color> colors;
+
+  const ColorPicker({super.key, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -10,15 +12,16 @@ class ColorPicker extends StatelessWidget {
       spacing: 8,
       // 위아래 간격
       runSpacing: 10,
-      children: [
-        renderColor(Colors.red),
-        renderColor(Colors.orange),
-        renderColor(Colors.yellow),
-        renderColor(Colors.green),
-        renderColor(Colors.blue),
-        renderColor(Colors.indigo),
-        renderColor(Colors.purple),
-      ],
+      // children 의 []을 삭제해주고 넣어준다.
+      children: colors.map((e) => renderColor(e)).toList()
+      // renderColor(Colors.red),
+      // renderColor(Colors.orange),
+      // renderColor(Colors.yellow),
+      // renderColor(Colors.green),
+      // renderColor(Colors.blue),
+      // renderColor(Colors.indigo),
+      // renderColor(Colors.purple),
+      ,
     );
   }
 }

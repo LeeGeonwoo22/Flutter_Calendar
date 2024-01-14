@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_callender/components/custom_textField.dart';
+import 'package:flutter_callender/database/drift_database.dart';
 import 'package:flutter_callender/widgets/pickColor.dart';
 import 'package:flutter_callender/widgets/saveButton.dart';
+import 'package:get_it/get_it.dart';
 
 class ScheduleBottonSheet extends StatefulWidget {
   const ScheduleBottonSheet({super.key});
@@ -58,7 +60,20 @@ class _ScheduleBottonSheetState extends State<ScheduleBottonSheet> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const ColorPicker(),
+                  FutureBuilder<List<CategoryColor>>(
+                      future: GetIt.I<LocalDatabase>().getCategoryColors(),
+                      builder: (context, snapshot) {
+                        // print(snapshot.data);
+                        return ColorPicker(
+                          colors: snapshot.hasData
+                              ? snapshot.data!
+                                  .map((e) => Color(
+                                        int.parse('FF${e.hexCode}', radix: 16),
+                                      ))
+                                  .toList()
+                              : [],
+                        );
+                      }),
                   const SizedBox(
                     height: 16,
                   ),
