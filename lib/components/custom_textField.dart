@@ -6,8 +6,14 @@ class CustomTextField extends StatelessWidget {
   final String label;
   // true - 시간 || false - 내용
   final bool isTime;
+  final FormFieldSetter<String> onSaved;
 
-  const CustomTextField({super.key, required this.label, required this.isTime});
+  const CustomTextField({
+    Key? key,
+    required this.label,
+    required this.isTime,
+    required this.onSaved,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,35 @@ class CustomTextField extends StatelessWidget {
   }
 
   Widget renderTextField() {
-    return TextField(
+    return TextFormField(
+      onSaved: onSaved,
+      // null이 return 되면 에러가 없다.
+      // 무조건 모든 어떤 텍스트 필드라도 validator 함수를 거쳐간다.
+      // 에러가 있으면 에러를 String 값으로 리턴해준다.
+      validator: (String? val) {
+        if (val == null || val.isEmpty) {
+          return '값을 입력해주세요';
+        }
+
+        if (isTime) {
+          // value 값을 int로 변환
+          int time = int.parse(val);
+
+          if (time < 0) {
+            return '0 이상의 숫자를 입력해주세요';
+          }
+
+          if (time > 24) {
+            return '24 이하의 숫자를 입력해주세요';
+          }
+        } else {
+          if (val.length > 500) {
+            return '500자 이하의 글자를 입력해주세요.';
+          }
+        }
+
+        return null;
+      },
       cursorColor: Colors.grey,
       // 시간이라면 1줄이 최대, 아니면 입력한 대로의 줄을 부여함
       maxLines: isTime ? 1 : null,

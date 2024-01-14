@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_callender/const/colors.dart';
 
 class saveButton extends StatelessWidget {
-  const saveButton({super.key});
+  final VoidCallback onPressed;
+
+  const saveButton({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +12,7 @@ class saveButton extends StatelessWidget {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: PRIMARY_COLOR,
             ),
