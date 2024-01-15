@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_callender/const/colors.dart';
 import 'package:flutter_callender/components/scheduleButtonSheet.dart';
 
-FloatingActionButton renderFloatingActionButton(context) {
+FloatingActionButton renderFloatingActionButton(context, selectedDay) {
   return FloatingActionButton(
     onPressed: () {
       showModalBottomSheet(
           context: context,
           isScrollControlled: true,
           builder: (_) {
-            return const ScheduleBottonSheet();
+            return ScheduleBottonSheet(selectedDate: selectedDay);
           });
     },
     backgroundColor: PRIMARY_COLOR,

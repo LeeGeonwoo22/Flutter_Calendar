@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_callender/components/custom_textField.dart';
 import 'package:flutter_callender/database/drift_database.dart';
@@ -6,7 +7,9 @@ import 'package:flutter_callender/widgets/saveButton.dart';
 import 'package:get_it/get_it.dart';
 
 class ScheduleBottonSheet extends StatefulWidget {
-  const ScheduleBottonSheet({super.key});
+  final DateTime selectedDate;
+
+  const ScheduleBottonSheet({required this.selectedDate, super.key});
 
   @override
   State<ScheduleBottonSheet> createState() => _ScheduleBottonSheetState();
@@ -18,6 +21,7 @@ class _ScheduleBottonSheetState extends State<ScheduleBottonSheet> {
   int? startTime;
   int? endTime;
   String? content;
+  int? selectedColorId;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +55,14 @@ class _ScheduleBottonSheetState extends State<ScheduleBottonSheet> {
                   const SizedBox(
                     height: 16,
                   ),
+                  _Content(
+                    onSaved: (String? val) {
+                      content = val;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // 내용 공간 자체는 전체로 늘어남
                   _Content(
                     onSaved: (String? val) {
@@ -64,14 +76,19 @@ class _ScheduleBottonSheetState extends State<ScheduleBottonSheet> {
                       future: GetIt.I<LocalDatabase>().getCategoryColors(),
                       builder: (context, snapshot) {
                         // print(snapshot.data);
+                        if (snapshot.hasData &&
+                            selectedColorId == null &&
+                            snapshot.data!.isNotEmpty) {
+                          selectedColorId = snapshot.data![0].id;
+                        }
                         return ColorPicker(
-                          colors: snapshot.hasData
-                              ? snapshot.data!
-                                  .map((e) => Color(
-                                        int.parse('FF${e.hexCode}', radix: 16),
-                                      ))
-                                  .toList()
-                              : [],
+                          colors: snapshot.hasData ? snapshot.data! : [],
+                          selectedColorId: selectedColorId,
+                          colorIdSetter: (int id) {
+                            setState(() {
+                              selectedColorId = id;
+                            });
+                          },
                         );
                       }),
                   const SizedBox(
@@ -104,6 +121,15 @@ class _ScheduleBottonSheetState extends State<ScheduleBottonSheet> {
       print('startTime : $startTime');
       print('endTime : $endTime');
       print('content : $content');
+      GetIt.I<LocalDatabase>().createSchedule(SchedulesCompanion(
+        date: Value(widget.selectedDate),
+        startTime: Value(startTime!),
+        endTime: Value(endTime!),
+        content: Value(content!),
+        colorId: Value(selectedColorId!),
+      ));
+      // 자동으로 시트닫음
+      Navigator.of(context).pop();
     } else {
       print('에러가 있습니다.');
     }
@@ -156,10 +182,10 @@ class _Time extends StatelessWidget {
   }
 }
 
-    // if (formKey.currentState!.validate()) {
-    //   // true
-    //   print('에러가 없습니다.');
-    // }else{
-    //   // false
-    //   print('에러가 있습니다.');
-    // }
+// if (formKey.currentState!.validate()) {
+//   // true
+//   print('에러가 없습니다.');
+// }else{
+//   // false
+//   print('에러가 있습니다.');
+// }

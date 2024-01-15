@@ -12,13 +12,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime? selectedDay;
+  DateTime? selectedDay = DateTime.utc(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
   DateTime focusedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: renderFloatingActionButton(context),
+        floatingActionButton: renderFloatingActionButton(context, selectedDay!),
         body: SafeArea(
           child: Column(
             children: [

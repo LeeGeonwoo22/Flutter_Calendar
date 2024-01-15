@@ -32,7 +32,7 @@ class LocalDatabase extends _$LocalDatabase {
       select(categoryColors).get();
   // Future<List<CategoryColor>> GetCategoryColors() =>
   //   select(categoryColors):get();
-
+  Stream<List<Schedule>> watchSchedules() => select(schedules).watch();
 //Missing concrete implementation of 'getter GeneratedDatabase.schemaVersion'.
 //Try implementing the missing method, or make the class abstract.
 //schema 를 만들어줘야함
