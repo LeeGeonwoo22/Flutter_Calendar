@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_callender/model/category.dart';
 import 'package:flutter_callender/model/schedule.dart';
+import 'package:flutter_callender/model/schedule_with_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 // privaite 까지 다 불러올 수 있다.
@@ -32,11 +33,16 @@ class LocalDatabase extends _$LocalDatabase {
       select(categoryColors).get();
   // Future<List<CategoryColor>> GetCategoryColors() =>
   //   select(categoryColors):get();
-  Stream<List<Schedule>> watchSchedules() {
+  Stream<List<ScheduleWithColor>> watchSchedules(DateTime date) {
+    // int number = 3;
+    // final resp = number.toString();
+    // final resp2 = number..toString();
+    // tbl 은 테이블이다. 테이블에 날짜가 equal(같은것) 받아온다.
+    // return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+    // where 는 void 이다.
     // final query = select(schedules);
     // query.where((tbl) => tbl.date.equals(date));
     // return query.watch();
-    // select(schedules).where(tbl)=>tbl.date.equals(date)).watch();
     final query = select(schedules).join([
       innerJoin(categoryColors, categoryColors.id.equalsExp(schedules.colorId))
     ]);
@@ -62,13 +68,16 @@ class LocalDatabase extends _$LocalDatabase {
         );
   }
 
+  @override
+  int get schemaVersion => 1;
+}
+
 //Missing concrete implementation of 'getter GeneratedDatabase.schemaVersion'.
 //Try implementing the missing method, or make the class abstract.
 //schema 를 만들어줘야함
 //DB 테이블이 변경될따마다 몇버전에서 몇버전으로 업그레이드할때를 표시. 무조건 1부터
-  @override
-  int get schemaVersion => 1;
-}
+@override
+int get schemaVersion => 1;
 
 // 어디에 연결해줘야할지 명시
 LazyDatabase _openConnection() {

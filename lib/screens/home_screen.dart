@@ -34,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 8,
               ),
-              TodayBanner(selectedDay: DateTime.now(), scheduleCount: 4),
+              TodayBanner(
+                selectedDay: DateTime.now(),
+              ),
               const SizedBox(
                 height: 8,
               ),

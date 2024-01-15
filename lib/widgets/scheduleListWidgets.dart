@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_callender/components/scheduleCard.dart';
 import 'package:flutter_callender/database/drift_database.dart';
+import 'package:flutter_callender/model/schedule_with_model.dart';
 import 'package:get_it/get_it.dart';
 
 class ScheduleListWidgets extends StatelessWidget {
@@ -15,17 +16,16 @@ class ScheduleListWidgets extends StatelessWidget {
     return Expanded(
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: StreamBuilder<List<Schedule>>(
+          child: StreamBuilder<List<ScheduleWithColor>>(
               stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
               builder: (context, snapshot) {
                 print(snapshot.hasData);
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
                 if (snapshot.hasData && snapshot.data!.isEmpty) {
                   return const Center(
-                    child: Text('스케쥴이 없습니다.'),
+                    child: Text('스케줄이 없습니다.'),
                   );
                 }
                 // print('-----original data----');
@@ -46,11 +46,11 @@ class ScheduleListWidgets extends StatelessWidget {
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 8),
                     itemBuilder: ((context, index) {
-                      final schedule = snapshot.data![index];
+                      final scheduleWithColor = snapshot.data![index];
                       return ScheduleCard(
-                          startTime: schedule.startTime,
-                          endTime: schedule.endTime,
-                          content: schedule.content,
+                          startTime: scheduleWithColor.schedule.startTime,
+                          endTime: scheduleWithColor.schedule.endTime,
+                          content: scheduleWithColor.schedule.content,
                           color: Colors.red);
                     }));
               })),
