@@ -32,7 +32,36 @@ class LocalDatabase extends _$LocalDatabase {
       select(categoryColors).get();
   // Future<List<CategoryColor>> GetCategoryColors() =>
   //   select(categoryColors):get();
-  Stream<List<Schedule>> watchSchedules() => select(schedules).watch();
+  Stream<List<Schedule>> watchSchedules() {
+    // final query = select(schedules);
+    // query.where((tbl) => tbl.date.equals(date));
+    // return query.watch();
+    // select(schedules).where(tbl)=>tbl.date.equals(date)).watch();
+    final query = select(schedules).join([
+      innerJoin(categoryColors, categoryColors.id.equalsExp(schedules.colorId))
+    ]);
+
+    query.where(schedules.date.equals(date));
+    query.orderBy(
+      [
+        // asc -> ascending 오름차순
+        // desc -> descending 내림차순
+        OrderingTerm.asc(schedules.startTime),
+      ],
+    );
+
+    return query.watch().map(
+          (rows) => rows
+              .map(
+                (row) => ScheduleWithColor(
+                  schedule: row.readTable(schedules),
+                  categoryColor: row.readTable(categoryColors),
+                ),
+              )
+              .toList(),
+        );
+  }
+
 //Missing concrete implementation of 'getter GeneratedDatabase.schemaVersion'.
 //Try implementing the missing method, or make the class abstract.
 //schema 를 만들어줘야함

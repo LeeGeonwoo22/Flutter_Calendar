@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 8,
               ),
-              const ScheduleListWidgets(),
+              ScheduleListWidgets(selectedDate: selectedDay!),
             ],
           ),
         ));
