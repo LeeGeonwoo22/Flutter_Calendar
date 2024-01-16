@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final String label;
   // true - 시간 || false - 내용
   final bool isTime;
+  final String initialValue;
   final FormFieldSetter<String> onSaved;
 
   const CustomTextField({
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     required this.label,
     required this.isTime,
     required this.onSaved,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
@@ -66,6 +68,8 @@ class CustomTextField extends StatelessWidget {
       maxLines: isTime ? 1 : null,
       // 화면 꽉 채워주기
       expands: !isTime,
+      // 데이터 초기값
+      initialValue: initialValue,
       // 키보드에서 숫자가 시간입력이 맞을경우 || 아닐경우 여러줄을 입력함(내용 입력)
       keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
       // 시간이 맞다면 숫자 입력 || 아니면 아무것도 입력하지않음
@@ -76,6 +80,7 @@ class CustomTextField extends StatelessWidget {
         // 필드에 색깔넣기
         filled: true,
         fillColor: Colors.grey[300],
+        suffixText: '시',
       ),
     );
   }

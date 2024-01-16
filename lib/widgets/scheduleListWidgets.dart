@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_callender/components/scheduleButtonSheet.dart';
 import 'package:flutter_callender/components/scheduleCard.dart';
 import 'package:flutter_callender/database/drift_database.dart';
 import 'package:flutter_callender/model/schedule_with_model.dart';
@@ -47,11 +48,32 @@ class ScheduleListWidgets extends StatelessWidget {
                         const SizedBox(height: 8),
                     itemBuilder: ((context, index) {
                       final scheduleWithColor = snapshot.data![index];
-                      return ScheduleCard(
-                          startTime: scheduleWithColor.schedule.startTime,
-                          endTime: scheduleWithColor.schedule.endTime,
-                          content: scheduleWithColor.schedule.content,
-                          color: Colors.red);
+                      return Dismissible(
+                        key: ObjectKey(scheduleWithColor.schedule.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (DismissDirection direction) {
+                          GetIt.I<LocalDatabase>()
+                              .removeSchedule(scheduleWithColor.schedule.id);
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (_) {
+                                  return ScheduleBottonSheet(
+                                    selectedDate: selectedDate,
+                                    scheduleId: scheduleWithColor.schedule.id,
+                                  );
+                                });
+                          },
+                          child: ScheduleCard(
+                              startTime: scheduleWithColor.schedule.startTime,
+                              endTime: scheduleWithColor.schedule.endTime,
+                              content: scheduleWithColor.schedule.content,
+                              color: Colors.red),
+                        ),
+                      );
                     }));
               })),
     );

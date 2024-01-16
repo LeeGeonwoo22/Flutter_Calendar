@@ -6,12 +6,10 @@ import 'package:flutter_callender/database/drift_database.dart';
 
 class TodayBanner extends StatelessWidget {
   final DateTime selectedDay;
-  final int scheduleCount;
 
   const TodayBanner({
     super.key,
     required this.selectedDay,
-    required this.scheduleCount,
   });
 
   final textStyle = const TextStyle(
@@ -34,7 +32,12 @@ class TodayBanner extends StatelessWidget {
           StreamBuilder<List<ScheduleWithColor>>(
               stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDay),
               builder: (context, snapshot) {
-                return Text('$scheduleCount개');
+                int count = 0;
+                if (snapshot.hasData) {
+                  count = snapshot.data!.length;
+                }
+
+                return Text('$count개');
               })
         ]),
       ),

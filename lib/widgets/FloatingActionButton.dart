@@ -9,7 +9,10 @@ FloatingActionButton renderFloatingActionButton(context, selectedDay) {
           context: context,
           isScrollControlled: true,
           builder: (_) {
-            return ScheduleBottonSheet(selectedDate: selectedDay);
+            return ScheduleBottonSheet(
+              selectedDate: selectedDay,
+              scheduleId: null,
+            );
           });
     },
     backgroundColor: PRIMARY_COLOR,
